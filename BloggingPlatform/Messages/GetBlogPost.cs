@@ -1,6 +1,9 @@
-﻿namespace BloggingPlatform.Messages;
+﻿using BloggingPlatform.Models;
+using MassTransit.Mediator;
 
-public class GetBlogPost
+namespace BloggingPlatform.Messages;
+
+public record GetBlogPost : Request<BlogPost?>
 {
     public int Id { get; set; }
 }
