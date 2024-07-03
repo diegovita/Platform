@@ -4,6 +4,7 @@ using BloggingPlatform.Messages;
 using BloggingPlatform.Models;
 using MassTransit.Mediator;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace BloggingPlatform.Consumers
 {
@@ -37,6 +38,7 @@ namespace BloggingPlatform.Consumers
             }
             catch(Exception ex)
             {
+                
                 throw new ApplicationException("An error occurred while fetching blog posts", ex);
             }
         }

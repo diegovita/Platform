@@ -3,6 +3,7 @@ using BloggingPlatform.Models;
 using MassTransit;
 using MassTransit.Mediator;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace BloggingPlatform.Controllers
 {
@@ -44,6 +45,7 @@ namespace BloggingPlatform.Controllers
             }
             catch(KeyNotFoundException ex)
             {
+                Log.Fatal(ex.Message);
                 return NotFound(ex.Message);
             }
         }
