@@ -1,8 +1,10 @@
-﻿namespace BloggingPlatform.Models
+﻿using BloggingPlatform.Dto;
+
+namespace BloggingPlatform.Models
 {
     public class Posts
     {
         //This class was created in order to satisfy Masstransit condition
-        public List<BlogPost> BlogPosts { get; set; }
+        public List<BlogspotDto> BlogPosts { get; set; }
     }
 }

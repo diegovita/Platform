@@ -20,7 +20,6 @@ namespace BloggingPlatform.Controllers
         [HttpGet]
         public async Task<ActionResult<List<BlogPost>>> GetBlogPosts()
         {
-
             var response = await _mediator.SendRequest(new GetBlogPosts());
 
             return Ok(response);
