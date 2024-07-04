@@ -2,11 +2,13 @@
 using BloggingPlatform.Models;
 using MassTransit;
 using MassTransit.Mediator;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 namespace BloggingPlatform.Controllers
 {
+    [Authorize]
     [Route("api/posts")]
     [ApiController]
     public class BlogPostsController : ControllerBase
@@ -21,6 +23,7 @@ namespace BloggingPlatform.Controllers
         [HttpGet]
         public async Task<ActionResult<List<BlogPost>>> GetBlogPosts()
         {
+            var headers = Request.Headers;
             var response = await _mediator.SendRequest(new GetBlogPosts());
 
             return Ok(response);
