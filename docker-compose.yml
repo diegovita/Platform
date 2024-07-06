@@ -1,5 +1,32 @@
 version: "3.8"
 services:
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "8080:8080"
+      - "8081:8081" 
+    depends_on:
+      - elasticsearch
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=blogging2024!
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
+      - ./init.sql:/usr/src/app/init.sql
+    entrypoint: /bin/bash /usr/src/app/entrypoint.sh 
+    
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.9.0
     container_name: elasticsearch
@@ -18,8 +45,6 @@ services:
       - esdata:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
-    networks:
-      - elastic
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.9.0
@@ -28,12 +53,6 @@ services:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports:
       - 5601:5601
-    networks:
-      - elastic
-
-networks:
-  elastic:
-    driver: bridge
 
 volumes:
   esdata:
