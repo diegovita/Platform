@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
+using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -16,8 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
     .Enrich.WithExceptionDetails()
-    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticConfiguration:Uri"])) { 
+    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticConfiguration:Uri"]!)) { 
         AutoRegisterTemplate = true,
         AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv8,
         IndexFormat = $"blogging-logs-{DateTime.UtcNow:yyyy-MM}"
@@ -25,7 +27,7 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-//ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+
 
 builder.Services.AddDbContext<BloggingPlatformContext>(options =>
 {
@@ -97,7 +99,14 @@ builder.Services.AddMediator(x => x.AddConsumersFromNamespaceContaining<Consumer
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
+    ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+}
+else if (app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
