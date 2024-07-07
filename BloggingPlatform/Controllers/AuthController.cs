@@ -1,4 +1,5 @@
 ﻿using BloggingPlatform.Data;
+using BloggingPlatform.Dto;
 using BloggingPlatform.Messages;
 using BloggingPlatform.Models;
 using MassTransit;
@@ -19,7 +20,7 @@ namespace BloggingPlatform.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] LoginModel loginModel)
+        public async Task<ActionResult> Login([FromQuery] LoginDto loginModel)
         {
             var token = await _mediator.SendRequest(new GetToken { Username = loginModel.Username, Password = loginModel.Password });
 
