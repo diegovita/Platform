@@ -112,18 +112,6 @@ else if (app.Environment.IsProduction())
     app.UseSwaggerUI();
 }
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var dbContext = scope.ServiceProvider.GetRequiredService<BloggingPlatformContext>();
-//    dbContext.Database.Migrate();
-
-//    if (!dbContext.Users.Any())
-//    {
-//        dbContext.Users.Add(new LoginModel { Username = "Blogging", Password = "Platform" });
-//        await dbContext.SaveChangesAsync();
-//    }
-//}
-
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
