@@ -14,6 +14,16 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          SA_PASSWORD: "blogging2024!"
+          ACCEPT_EULA: "Y"
+        ports:
+          - 1433:1433
+        options: --health-cmd "/opt/mssql-tools/bin/sqlcmd -U SA -P $SA_PASSWORD -Q 'SELECT 1'" --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -26,3 +36,5 @@ jobs:
       run: dotnet build --no-restore
     - name: Build Docker image
       run: docker build -t bloggingapi:v1 .
+    - name: Run and Test
+      run: docker run bloggingapi:v1 dotnet test --no-build --verbosity normal
