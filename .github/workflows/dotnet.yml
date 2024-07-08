@@ -23,20 +23,3 @@ jobs:
       run: dotnet build --no-restore
     - name: Build Docker image
       run: docker build -t bloggingapi:v1 .
-    - name: Start SQL Server
-      run: |
-          docker run -d --name sqlserver -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=blogging2024!' -p 1433:1433 mcr.microsoft.com/mssql/server:2022-latest
-          sleep 15s
-    - name: Show SQL Server logs
-      run: docker logs sqlserver
-    - name: Run migrations
-      env:
-          ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=BloggingPlatform;User Id=sa;Password=blogging2024!;"
-      run: docker run --rm -e ConnectionStrings__DefaultConnection bloggingapi:v1 dotnet ef database update
-
-    - name: Run the Docker container
-      env:
-          ASPNETCORE_ENVIRONMENT: Development
-          ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=BloggingPlatform;User Id=sa;Password=blogging2024!;"
-      run: docker run -e ASPNETCORE_ENVIRONMENT -e ConnectionStrings__DefaultConnection -d bloggingapi:v1
-    
