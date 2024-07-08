@@ -7,8 +7,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
     ports:
-      - "8080:8080"
-      - "8081:8081" 
+      - "8082:8080"
+      - "8083:8081" 
     depends_on:
       - elasticsearch
       - sqlserver
@@ -45,7 +45,7 @@ services:
     volumes:
       - production-esdata:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
+      - 9201:9200
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.0
@@ -53,7 +53,7 @@ services:
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports:
-      - 5601:5601
+      - 5602:5601
 
 volumes:
   production-esdata:

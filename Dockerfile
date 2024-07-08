@@ -1,12 +1,12 @@
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy AS base
 USER app
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
@@ -26,4 +26,6 @@ RUN dotnet publish "./BloggingPlatform.csproj" -c $BUILD_CONFIGURATION -o /app/p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+USER root
+RUN sed -i 's/CipherString = DEFAULT@SECLEVEL=2/CipherString = DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf
 ENTRYPOINT ["dotnet","BloggingPlatform.dll"]

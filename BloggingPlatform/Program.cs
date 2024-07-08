@@ -118,12 +118,21 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-if (app.Environment.IsDevelopment())
-    using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+{
+    try
     {
-        var context = scope.ServiceProvider.GetRequiredService<BloggingPlatformContext>();
-        context.Database.Migrate();
-        DbInitializer.Initialize(context);
+        using (var scope = app.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<BloggingPlatformContext>();
+            
+            DbInitializer.Initialize(context);
+        }
     }
+    catch(Exception ex)
+    {
+        Log.Fatal(ex.Message);
+    }
+}
 
 app.Run();

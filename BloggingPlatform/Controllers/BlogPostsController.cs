@@ -23,7 +23,6 @@ namespace BloggingPlatform.Controllers
         [HttpGet]
         public async Task<ActionResult<List<BlogPost>>> GetBlogPosts()
         {
-            var headers = Request.Headers;
             var response = await _mediator.SendRequest(new GetBlogPosts());
 
             return Ok(response);
