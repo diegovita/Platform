@@ -23,10 +23,6 @@ services:
       - "1433:1433"
     volumes:
       - production-sqlserverdata:/var/opt/mssql
-      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
-      - ./init.sql:/usr/src/app/init.sql
-    entrypoint: /bin/bash /usr/src/app/entrypoint.sh 
-    
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
