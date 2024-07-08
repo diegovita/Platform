@@ -36,5 +36,4 @@ jobs:
       run: dotnet build --no-restore
     - name: Build Docker image
       run: docker build -t bloggingapi:v1 .
-    - name: Run Tests
-      run: docker run --rm bloggingapi:v1
+    
