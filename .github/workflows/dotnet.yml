@@ -37,4 +37,5 @@ jobs:
     - name: Build Docker image
       run: docker build -t bloggingapi:v1 .
     - name: Run and Test
-      run: docker run bloggingapi:v1 dotnet test --no-build --verbosity normal
+      run: |
+        docker run bloggingapi:v1 bash -c "dotnet test --no-build --verbosity normal"
