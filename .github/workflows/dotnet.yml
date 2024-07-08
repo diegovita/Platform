@@ -36,6 +36,10 @@ jobs:
       run: dotnet build --no-restore
     - name: Build Docker image
       run: docker build -t bloggingapi:v1 .
-    - name: Run and Test
+    - name: Run Docker container
+      run: docker run --name bloggingapi -d -p 8080:80 bloggingapi:v1
+    - name: Wait for API to start
+      run: sleep 10 
+    - name: Execute Tests
       run: |
-        docker run bloggingapi:v1 bash -c "dotnet test --no-build --verbosity normal"
+          docker exec bloggingapi bash -c "dotnet test --no-build --verbosity normal"
