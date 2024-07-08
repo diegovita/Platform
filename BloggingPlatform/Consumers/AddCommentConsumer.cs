@@ -2,6 +2,7 @@
 using BloggingPlatform.Messages;
 using BloggingPlatform.Models;
 using MassTransit.Mediator;
+using Microsoft.EntityFrameworkCore;
 
 namespace BloggingPlatform.Consumers
 {
@@ -15,13 +16,20 @@ namespace BloggingPlatform.Consumers
         }
         protected override async Task<Comment> Handle(AddComment request, CancellationToken cancellationToken)
         {
-            var comment = new Comment { BlogPostId = request.BlogPostId, Content = request.Content };
+              var blogPost = await _context.BlogPosts.FirstOrDefaultAsync(x => x.Id == request.BlogPostId);
 
-            await _context.Comments.AddAsync(comment);
+            if (blogPost is not null)
+            {
+                var comment = new Comment { BlogPostId = request.BlogPostId, Content = request.Content };
 
-            await _context.SaveChangesAsync(cancellationToken);
+                await _context.Comments.AddAsync(comment);
 
-            return comment;
+                await _context.SaveChangesAsync(cancellationToken);
+
+                return comment;
+            }
+            else
+                return new Comment();
         }
     }
 }

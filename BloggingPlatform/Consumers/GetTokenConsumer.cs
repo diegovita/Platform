@@ -21,10 +21,11 @@ public class GetTokenConsumer : MediatorRequestHandler<GetToken, BearerToken>
     }
     protected override async Task<BearerToken> Handle(GetToken request, CancellationToken cancellationToken)
     {
+
         var user = _context.Users.SingleOrDefault(u => u.Username == request.Username && u.Password == request.Password);
 
         if (user == null)
-            throw new UserNotFoundException("Username not found");
+            return new BearerToken();
 
         var jwtSettings = _configuration.GetSection("Jwt");
         var secretKey = jwtSettings["Key"]!;

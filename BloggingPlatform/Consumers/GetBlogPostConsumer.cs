@@ -15,13 +15,11 @@ namespace BloggingPlatform.Consumers
         }
         protected override async Task<BlogPost?> Handle(GetBlogPost request, CancellationToken cancellationToken)
         {
-
-
             var blogPost = await _context.BlogPosts.Include(bp => bp.Comments)
                                                    .FirstOrDefaultAsync(bp => bp.Id == request.Id, cancellationToken);
 
-            if(blogPost is null)
-                throw new KeyNotFoundException($"Blog post with ID: {request.Id} not found");
+            if (blogPost is null)
+                return new BlogPost();
             
             return blogPost;
         }

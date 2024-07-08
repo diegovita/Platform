@@ -21,25 +21,17 @@ public class GetBlogPostsConsumer : MediatorRequestHandler<GetBlogPosts, Posts>
     {
         var posts = new Posts();
 
-        try
+        var result = await _context.BlogPosts.Select(bp => new BlogspotDto
         {
-            var result = await _context.BlogPosts.Select(bp => new BlogspotDto
-            {
-                Id = bp.Id,
-                Title = bp.Title,
-                Content = bp.Content,
-                NumberOfComments = bp.Comments.Count
-            }).ToListAsync();
+            Id = bp.Id,
+            Title = bp.Title,
+            Content = bp.Content,
+            NumberOfComments = bp.Comments.Count
+        }).ToListAsync();
 
-            if(result.Count > 0)
-                posts = new Posts { BlogPosts = result };
+        if (result.Count > 0)
+            posts = new Posts { BlogPosts = result };
 
-            return posts;
-        }
-        catch(Exception ex)
-        {
-            Log.Fatal(ex.Message);
-            throw;
-        }
+        return posts;
     }
 }

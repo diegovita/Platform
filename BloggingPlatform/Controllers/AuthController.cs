@@ -1,10 +1,9 @@
-﻿using BloggingPlatform.Data;
-using BloggingPlatform.Dto;
+﻿using BloggingPlatform.Dto;
 using BloggingPlatform.Messages;
-using BloggingPlatform.Models;
 using MassTransit;
 using MassTransit.Mediator;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace BloggingPlatform.Controllers
 {
@@ -20,11 +19,26 @@ namespace BloggingPlatform.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromQuery] LoginDto loginModel)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult> Login([FromQuery] LoginDto loginDto)
         {
-            var token = await _mediator.SendRequest(new GetToken { Username = loginModel.Username, Password = loginModel.Password });
+            try
+            {
+                var token = await _mediator.SendRequest(new GetToken { Username = loginDto.Username, Password = loginDto.Password });
 
-            return Ok(new { token.Token });
+                if (string.IsNullOrEmpty(token.Token))
+                    return Unauthorized("Invalid username or password.");
+
+                return Ok(new { token.Token });
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing the request.");
+            }
+            
         }
     }
 }
