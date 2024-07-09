@@ -50,6 +50,9 @@ Stack Management > Index Management > Copy blogging-logs-2024- to clipboard.
 
 Go top left corner below elasticsearch logo, and then click on Discover > Create DataView > paste blogging-logs-2024- and add * at the end in the index pattern textbox, like this: blogging-logs-2024-*, choose whatever name you like and create. You will be able to check logs on Discover tab.
 
+How to use the API:
+
+Go to the Login endpoint and write "Blogging" as username and "Platform" as password. You will be given a JWT for authentication, which will last 60 minutes. There's no endpoint to add more users to sql server, so you would have to do it manually instead.
 
 
 If I had more time I would:
