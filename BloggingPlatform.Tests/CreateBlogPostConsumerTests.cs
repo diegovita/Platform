@@ -20,7 +20,7 @@ public class CreateBlogPostConsumerTests
             var handler = new CreateBlogPostConsumer(context);
             var result = await handler.HandleAsync(new CreateBlogPost { Title = "New Blog Post", Content = "Content" }, CancellationToken.None);
 
-            // Assert
+           
             Assert.NotNull(result);
             Assert.Equal("New Blog Post", result.Title);
             Assert.Equal("Content", result.Content);

@@ -11,7 +11,7 @@ public class GetBlogPostConsumerTests
     [Fact]
     public async Task Handle_ReturnsBlogPostIfExists()
     {
-        // Arrange
+       
         var options = new DbContextOptionsBuilder<BloggingPlatformContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
