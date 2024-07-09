@@ -13,7 +13,11 @@ public class CreateBlogPostConsumer : MediatorRequestHandler<CreateBlogPost, Blo
     {
         _context = context;
     }
-    protected override async Task<BlogPost> Handle(CreateBlogPost request, CancellationToken cancellationToken)
+    protected override Task<BlogPost> Handle(CreateBlogPost request, CancellationToken cancellationToken)
+    {
+        return HandleAsync(request, cancellationToken);
+    }
+    public async Task<BlogPost> HandleAsync(CreateBlogPost request, CancellationToken cancellationToken)
     {
         var blogPost = new BlogPost { Content = request.Content, Title = request.Title };
 

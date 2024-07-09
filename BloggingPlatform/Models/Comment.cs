@@ -7,7 +7,7 @@ public class Comment
 {
     public int Id { get; set; }
     [Required]
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
     [Required]
     public int BlogPostId { get; set; }
     [JsonIgnore]

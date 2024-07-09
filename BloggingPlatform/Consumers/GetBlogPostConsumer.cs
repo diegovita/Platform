@@ -13,7 +13,13 @@ public class GetBlogPostConsumer : MediatorRequestHandler<GetBlogPost, BlogPost?
     {
         _context = context;
     }
-    protected override async Task<BlogPost?> Handle(GetBlogPost request, CancellationToken cancellationToken)
+
+    protected override Task<BlogPost?> Handle(GetBlogPost request, CancellationToken cancellationToken)
+    {
+        return HandleAsync(request, cancellationToken);
+    }
+
+    public async Task<BlogPost?> HandleAsync(GetBlogPost request, CancellationToken cancellationToken)
     {
         var blogPost = await _context.BlogPosts.Include(bp => bp.Comments)
                                                .FirstOrDefaultAsync(bp => bp.Id == request.Id, cancellationToken);

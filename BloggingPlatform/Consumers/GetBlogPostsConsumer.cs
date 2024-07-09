@@ -4,7 +4,6 @@ using BloggingPlatform.Messages;
 using BloggingPlatform.Models;
 using MassTransit.Mediator;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace BloggingPlatform.Consumers;
 
@@ -18,6 +17,11 @@ public class GetBlogPostsConsumer : MediatorRequestHandler<GetBlogPosts, Posts>
     }
 
     protected override async Task<Posts> Handle(GetBlogPosts request, CancellationToken cancellationToken)
+    {
+        return await HandleAsync(request, cancellationToken);
+    }
+
+    public async Task<Posts> HandleAsync(GetBlogPosts request, CancellationToken cancellationToken)
     {
         var posts = new Posts();
 

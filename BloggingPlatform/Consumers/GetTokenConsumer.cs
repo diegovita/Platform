@@ -19,7 +19,12 @@ public class GetTokenConsumer : MediatorRequestHandler<GetToken, BearerToken>
         _context = context;
         _configuration = configuration;
     }
-    protected override async Task<BearerToken> Handle(GetToken request, CancellationToken cancellationToken)
+
+    protected override Task<BearerToken> Handle(GetToken request, CancellationToken cancellationToken)
+    {
+        return HandleAsync(request, cancellationToken);
+    }
+    public async Task<BearerToken> HandleAsync(GetToken request, CancellationToken cancellationToken)
     {
 
         var user = _context.Users.SingleOrDefault(u => u.Username == request.Username && u.Password == request.Password);
@@ -54,4 +59,6 @@ public class GetTokenConsumer : MediatorRequestHandler<GetToken, BearerToken>
         var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
         return await Task.FromResult(new BearerToken { Token = jwtToken });
     }
+
+    
 }

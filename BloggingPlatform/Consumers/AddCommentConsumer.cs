@@ -14,7 +14,11 @@ public class AddCommentConsumer : MediatorRequestHandler<AddComment, Comment>
     {
         _context = context;
     }
-    protected override async Task<Comment> Handle(AddComment request, CancellationToken cancellationToken)
+    protected override Task<Comment> Handle(AddComment request, CancellationToken cancellationToken)
+    {
+        return HandleAsync(request, cancellationToken);
+    }
+    public async Task<Comment> HandleAsync(AddComment request, CancellationToken cancellationToken)
     {
           var blogPost = await _context.BlogPosts.FirstOrDefaultAsync(x => x.Id == request.BlogPostId);
 
