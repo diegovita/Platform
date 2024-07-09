@@ -1,6 +1,5 @@
-﻿namespace BloggingPlatform.Consumers
+﻿namespace BloggingPlatform.Consumers;
+
+public readonly struct Consumers
 {
-    public readonly struct Consumers
-    {
-    }
 }

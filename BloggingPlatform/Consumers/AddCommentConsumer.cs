@@ -4,32 +4,31 @@ using BloggingPlatform.Models;
 using MassTransit.Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace BloggingPlatform.Consumers
+namespace BloggingPlatform.Consumers;
+
+public class AddCommentConsumer : MediatorRequestHandler<AddComment, Comment>
 {
-    public class AddCommentConsumer : MediatorRequestHandler<AddComment, Comment>
+    private readonly BloggingPlatformContext _context;
+
+    public AddCommentConsumer(BloggingPlatformContext context)
     {
-        private readonly BloggingPlatformContext _context;
+        _context = context;
+    }
+    protected override async Task<Comment> Handle(AddComment request, CancellationToken cancellationToken)
+    {
+          var blogPost = await _context.BlogPosts.FirstOrDefaultAsync(x => x.Id == request.BlogPostId);
 
-        public AddCommentConsumer(BloggingPlatformContext context)
+        if (blogPost is not null)
         {
-            _context = context;
+            var comment = new Comment { BlogPostId = request.BlogPostId, Content = request.Content };
+
+            await _context.Comments.AddAsync(comment);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return comment;
         }
-        protected override async Task<Comment> Handle(AddComment request, CancellationToken cancellationToken)
-        {
-              var blogPost = await _context.BlogPosts.FirstOrDefaultAsync(x => x.Id == request.BlogPostId);
-
-            if (blogPost is not null)
-            {
-                var comment = new Comment { BlogPostId = request.BlogPostId, Content = request.Content };
-
-                await _context.Comments.AddAsync(comment);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return comment;
-            }
-            else
-                return new Comment();
-        }
+        else
+            return new Comment();
     }
 }

@@ -5,41 +5,40 @@ using MassTransit.Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
-namespace BloggingPlatform.Controllers
+namespace BloggingPlatform.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class AuthController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    private readonly IMediator _mediator;
+
+    public AuthController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public AuthController(IMediator mediator)
+    [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult> Login([FromQuery] LoginDto loginDto)
+    {
+        try
         {
-            _mediator = mediator;
-        }
+            var token = await _mediator.SendRequest(new GetToken { Username = loginDto.Username, Password = loginDto.Password });
 
-        [HttpPost("login")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult> Login([FromQuery] LoginDto loginDto)
+            if (string.IsNullOrEmpty(token.Token))
+                return Unauthorized("Invalid username or password.");
+
+            return Ok(new { token.Token });
+        }
+        catch (Exception ex)
         {
-            try
-            {
-                var token = await _mediator.SendRequest(new GetToken { Username = loginDto.Username, Password = loginDto.Password });
-
-                if (string.IsNullOrEmpty(token.Token))
-                    return Unauthorized("Invalid username or password.");
-
-                return Ok(new { token.Token });
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing the request.");
-            }
-            
+            Log.Fatal(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing the request.");
         }
+        
     }
 }
 
