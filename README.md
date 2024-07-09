@@ -21,30 +21,21 @@ Elasticsearch along with Kibana will let you monitorize LOGS in real-time.
 
 Production Environment Urls and Ports:
 
-Web Api:
-http://localhost:8082
-Swagger:
-http://localhost:8082/swagger/index.html
-Elasticsearch: 
-http://elasticsearch:9201
-Kibana: 
-http://elasticsearch:5602
-SQL Server
-localhost:1433
+Web Api -> http://localhost:8082
+Swagger -> http://localhost:8082/swagger/index.html
+Elasticsearch -> http://elasticsearch:9201
+Kibana -> http://elasticsearch:5602
+SQL Server -> localhost:1433
 user= sa
 password= blogging2024!
 
 Development Environment Urls and Ports:
 
-Elasticsearch: 
-http://elasticsearch:9200
-Kibana: 
-http://elasticsearch:5601
-SQL Server
-localhost:1434
+Elasticsearch -> http://elasticsearch:9200
+Kibana -> http://elasticsearch:5601
+SQL Server -> localhost:1434
 user= sa
 password= blogging2024!
-
 
 How to check logs:
 
