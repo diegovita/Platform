@@ -10,18 +10,22 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-
-
+COPY *.sln ./
 COPY ["BloggingPlatform/BloggingPlatform.csproj", "BloggingPlatform/"]
-RUN dotnet restore "./BloggingPlatform/./BloggingPlatform.csproj"
+COPY ["BloggingPlatform.Tests/BloggingPlatform.Tests.csproj", "BloggingPlatform.Tests/"]
+RUN dotnet restore
+
+
 COPY . .
-WORKDIR "/src/BloggingPlatform"
-RUN dotnet build "./BloggingPlatform.csproj" -c $BUILD_CONFIGURATION -o /app/build
-RUN dotnet test "./BloggingPlatform.csproj" -c $BUILD_CONFIGURATION --no-build --verbosity normal
+
+RUN dotnet build --configuration Release
+
+WORKDIR "/src/BloggingPlatform.Tests"
+RUN dotnet test --configuration Release
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./BloggingPlatform.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
