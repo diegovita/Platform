@@ -54,6 +54,7 @@ How to use the API:
 
 Go to the Login endpoint and write "Blogging" as username and "Platform" as password. You will be given a JWT for authentication, which will last 60 minutes. There's no endpoint to add more users to sql server, so you would have to do it manually instead.
 
+PD: If you happen to get 500 server error while introducing "Blogging" and "Platform" in the login endpoint, check Kibana to detect if the following exception occurs: "Failed to open BloggingPlatform database". If that happens, DELETE all containers created by production's docker compose, delete web api image created and re-execute docker-compose.
 
 If I had more time I would:
 
