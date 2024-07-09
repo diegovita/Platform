@@ -61,7 +61,15 @@ Go top left corner below elasticsearch logo, and then click on Discover > Create
 
 
 
+If I had more time I would:
 
+Since I'm using MassTransit, a framework for distributed applications, I would stop using the mediator pattern to replace it with the transport provided for RabbitMQ, which mean I should also run a RabbitMQ container. This allows communication between application components asynchronously, improving scalability and resilience by avoiding blocking while waiting for responses. Additionally, the MassTransit library allows me to leverage its Saga pattern approach, which efficiently coordinates distributed transactions among multiple services.
+
+By using Logstash tools (part of the Elasticsearch stack), I could insert each new record in SQL Server into an Elasticsearch index. Elasticsearch indices return responses faster than SQL Server. This setup would work as follows:
+
+Writes would be performed to the SQL Server database. Logstash would automatically listen for each new record and insert them into the Elasticsearch database. Searches in the endpoints would then be directed to Elasticsearch instead of retrieving directly from SQL Server.
+
+Finally, I would create all files needed to deploy all these artifacts in a Kubernetes cluster.
 
 
   
